@@ -33,7 +33,7 @@
                 headers: {
                     'content-type':'application/json'
                 },
-                body: JSON.stringify(datas.pledged)
+                body: JSON.stringify(datas)
             })
 
             // redirection
