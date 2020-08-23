@@ -25,7 +25,7 @@
 
     async function handleSubmitForm() {
         const datas = await data;
-        datas.pledged + parseInt(amount)
+        datas.pledged += parseInt(amount)
         
         try {
             const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${params.id}`, {
@@ -33,7 +33,7 @@
                 headers: {
                     'content-type':'application/json'
                 },
-                body: JSON.stringify(datas)
+                body: JSON.stringify(datas.pledged)
             })
 
             // redirection
