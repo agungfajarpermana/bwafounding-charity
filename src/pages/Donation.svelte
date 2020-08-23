@@ -24,7 +24,7 @@
     }
 
     async function handleSubmitForm() {
-        charity.pledged += parseInt(amount);
+        data.pledged += parseInt(amount);
         try {
             const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${params.id}`, {
                 method: 'PUT',
