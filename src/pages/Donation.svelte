@@ -5,7 +5,7 @@
     import Footer from "../components/Footer.svelte";
 
     export let params;
-    let charity, amount, name, email, agree = false;
+    let amount, name, email, agree = false;
     let data = getCharity(params.id);
 
     async function getCharity(id) {
@@ -24,18 +24,24 @@
     }
 
     async function handleSubmitForm() {
-        data.pledged += parseInt(amount);
+        const datas = await data;
+        datas.pledged + parseInt(amount)
+        
         try {
             const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${params.id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type':'application/json'
                 },
-                body: JSON.stringify(charity)
+                body: JSON.stringify(datas)
             })
 
             // redirection
-            router.redirect('/success');
+            if (res.ok) {
+                router.redirect('/success');
+            } else {
+                throw new Error(datas)
+            }
         } catch (error) {
             console.log(error)
         }
