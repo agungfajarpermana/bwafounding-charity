@@ -1,8 +1,8 @@
 <script>
-    import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
+    import {charities} from '../stores/store';
+    import Loader from './Preload.svelte';
     import Modal from './Modal.svelte';
 
-    export let charities;
     let isModalButton = false;
 
     function calculateFounded(pledged, target) {
@@ -44,7 +44,7 @@
       </div><!-- .row end -->
 
       <div class="row">
-        {#each charities as charity}
+        {#each $charities as charity}
         <div class="col-lg-4 col-md-6">
           <!-- modal goes here -->
           <!-- Modal -->
@@ -144,6 +144,8 @@
             </div><!-- .xs-item-content END -->
           </div><!-- .xs-popular-item END -->
         </div>
+        {:else}
+          <Loader />
         {/each}
       </div><!-- .row end -->
     </div><!-- .container end -->

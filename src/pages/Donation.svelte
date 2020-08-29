@@ -1,47 +1,47 @@
 <script>
     import router from 'page';
+    import {charity, getCharity} from '../stores/store';
+    import {params} from '../stores/routes';
     import Header from "../components/Header.svelte";
     import Preload from '../components/Preload.svelte';
     import Footer from "../components/Footer.svelte";
 
-    export let params;
     let amount, name, email, agree = false;
-    let data = getCharity(params.id);
-
-    async function getCharity(id) {
-        const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${id}`);
-        const data = await res.json();
-
-        if (res.ok) {
-            return data;
-        } else {
-            throw new Error(data)
-        }
-    }
+    getCharity($params.id)
 
     function handleClickDonate() {
         console.log('click')
     }
 
     async function handleSubmitForm() {
-        const datas = await data;
-        datas.pledged += parseInt(amount)
+        $charity.pledged += parseInt(amount)
         
         try {
-            const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${params.id}`, {
+            await fetch(`https://charity-api-bwa.herokuapp.com/charities/${$params.id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type':'application/json'
                 },
-                body: JSON.stringify(datas)
+                body: JSON.stringify($charity)
             })
 
             // redirection
-            if (res.ok) {
-                router.redirect('/success');
-            } else {
-                throw new Error(datas)
-            }
+            const resMid = await fetch('/.netlify/functions/payment', {
+                method: 'POST',
+                headers: {
+                    'content-type':'application/json'
+                },
+                body: JSON.stringify({
+                    id: $params.id,
+                    amount: parseInt(amount),
+                    name,
+                    email
+                })
+            });
+
+            const resMidtrans = await resMid.json();
+            console.log(resMidtrans)
+            window.location.href = resMidtrans.url;
         } catch (error) {
             console.log(error)
         }
@@ -51,16 +51,16 @@
 <Header/>
 <!-- welcome section -->
 <!--breadcumb start here-->
-{#await data}
+{#if !$charity}
     <Preload />
-{:then charity}
+{:else}
     <section class="xs-banner-inner-section parallax-window" style=
     "background-image:url('/assets/images/slide3.png')">
         <div class="xs-black-overlay"></div>
         <div class="container">
         <div class="color-white xs-inner-banner-content">
             <h2>Donate Now</h2>
-            <p>{charity.title}</p>
+            <p>{$charity.title}</p>
             <ul class="xs-breadcumb">
             <li class="badge badge-pill badge-primary">
                 <a href="/" class="color-white">Home /</a> Donate
@@ -82,7 +82,7 @@
             <div class="col-lg-6">
                 <div class="xs-donation-form-wraper">
                 <div class="xs-heading xs-mb-30">
-                    <h2 class="xs-title">{charity.title}</h2>
+                    <h2 class="xs-title">{$charity.title}</h2>
                     <p class="small">To learn more about make donate charity
                     with us visit our "<span class="color-green">Contact
                         us</span>" site. By calling <span class=
@@ -132,7 +132,7 @@
         </div><!-- .container end -->
         </section><!-- End donation form section -->
     </main><!-- footer section start -->
-{/await}
+{/if}
 <Footer/>
 
 <style>
