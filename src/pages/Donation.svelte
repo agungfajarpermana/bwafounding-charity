@@ -67,8 +67,7 @@
 {#if !$charity}
     <Preload />
 {:else}
-    <section class="xs-banner-inner-section parallax-window" style=
-    "background-image:url('/assets/images/slide3.png')">
+    <section class="xs-banner-inner-section parallax-window" style="background-image:url('/assets/images/slide3.png')">
         <div class="xs-black-overlay"></div>
         <div class="container">
         <div class="color-white xs-inner-banner-content">

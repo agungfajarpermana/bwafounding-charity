@@ -2,6 +2,7 @@ import {writable} from 'svelte/store';
 
 export const charities = writable([]);
 export const charity = writable({});
+export const loaders = writable(false);
 
 async function getCharities() {
     const res  = await fetch("https://charity-api-bwa.herokuapp.com/charities/");
@@ -23,4 +24,10 @@ export async function getCharity(id) {
     } else {
         throw new Error(data)
     }
+}
+
+export async function Loaders(condition) {
+    setTimeout(() => {
+        loaders.set(condition)
+    }, 1500)
 }

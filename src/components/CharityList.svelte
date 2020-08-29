@@ -46,7 +46,7 @@
 
       <div class="row">
         {#each $charities as charity}
-        <div class="col-lg-4 col-md-6" in:slide={{delay:1000}} out:fade={{delay:1000}}>
+        <div class="col-lg-4 col-md-6" in:slide={{delay:500}} out:fade={{delay:500}}>
           <!-- modal goes here -->
           <!-- Modal -->
           {#if isModalButton}

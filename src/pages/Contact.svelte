@@ -1,6 +1,15 @@
 <script>
+    import {loaders, Loaders} from '../stores/store';
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
+    import Loader from '../components/Preload.svelte';
+    import { onMount } from 'svelte';
+
+    onMount(() => {
+        loaders.set(false)
+    })
+
+    $: Loaders(true)
 
     google.maps.event.addDomListener(window, 'load', init);
 
@@ -41,6 +50,9 @@
     }
 </script>
 
+{#if !$loaders}
+<Loader />
+{:else}
 <Header />
 <!-- welcome section -->
 <!--breadcumb start here-->
@@ -103,3 +115,4 @@
 </section>  <!-- End contact section -->
 </main>
 <Footer />
+{/if}

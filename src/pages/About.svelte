@@ -1,19 +1,18 @@
 <script>
+    import { onMount } from 'svelte';
+    import {loaders, Loaders} from '../stores/store';
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
     import Loader from '../components/Preload.svelte';
 
-    let loader = false;
-
-    function abouts() {
-        setTimeout(() => {
-            loader = true;
-        }, 1000)
-    }
-    abouts();
+    onMount(() => {
+        loaders.set(false)
+    })
+    
+    $: Loaders(true)
 </script>
 
-{#if !loader}
+{#if !$loaders}
 <Loader/>
 {:else}
 <Header/>
