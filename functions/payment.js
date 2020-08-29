@@ -15,12 +15,13 @@ exports.handler = function (event, context, callback) {
     })
 
     const {id, name, email, amount} = JSON.parse(event.body);
+    const names = name.split(" ");
 
-    if (name && name.length > 1) {
-        first_name = name[0];
-        last_name  = name[1];
-    } else if (name.length === 1) {
-        first_name = name[0];
+    if (names && names.length > 1) {
+        first_name = names[0];
+        last_name  = names[1];
+    } else if (names.length === 1) {
+        first_name = names[0];
         last_name  = '';
     }
 
