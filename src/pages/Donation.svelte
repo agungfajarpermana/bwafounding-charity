@@ -6,14 +6,27 @@
     import Preload from '../components/Preload.svelte';
     import Footer from "../components/Footer.svelte";
 
-    let amount, name, email, agree = false;
+    let amount, name, email, agree = false, isClick = false, contribute = 0;
     getCharity($params.id)
+
+    $: if ($charity) {
+        contribute = Math.floor((parseInt((!amount ? 0 : amount)) / $charity.target) * 100);
+
+        if (isNaN(contribute)) {
+            contribute = 0;
+        }
+    }
+
+    $: if (agree || !agree) {
+        isClick = agree;
+    }
 
     function handleClickDonate() {
         console.log('click')
     }
 
     async function handleSubmitForm() {
+        isClick = !isClick;
         $charity.pledged += parseInt(amount)
         
         try {
@@ -86,8 +99,13 @@
                     <p class="small">To learn more about make donate charity
                     with us visit our "<span class="color-green">Contact
                         us</span>" site. By calling <span class=
-                        "color-green">+44(0) 800 883 8450</span>.</p><span class=
-                        "xs-separetor v2"></span>
+                        "color-green">+44(0) 800 883 8450</span>.</p>
+                        <h5>
+                            Your donation will be contributing
+                            <strong>{contribute}%</strong> 
+                            of total current donation.
+                        </h5>
+                        <span class="xs-separetor v2"></span>
                 </div><!-- .xs-heading end -->
                 <form on:submit|preventDefault={handleSubmitForm} action="#" method="post" id="xs-donation-form" class=
                 "xs-donation-form" name="xs-donation-form">
@@ -122,7 +140,7 @@
                             Agree
                         </label>
                     </div>
-                    <button type="submit" on:click={handleClickDonate} class="btn btn-warning" disabled={!agree}><span class=
+                    <button type="submit" on:click={handleClickDonate} class="btn btn-warning" disabled={!isClick}><span class=
                     "badge"><i class="fa fa-heart"></i></span> Donate
                 now</button>
                 </form><!-- .xs-donation-form #xs-donation-form END -->

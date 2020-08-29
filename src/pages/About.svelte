@@ -1,8 +1,21 @@
 <script>
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
+    import Loader from '../components/Preload.svelte';
+
+    let loader = false;
+
+    function abouts() {
+        setTimeout(() => {
+            loader = true;
+        }, 1000)
+    }
+    abouts();
 </script>
 
+{#if !loader}
+<Loader/>
+{:else}
 <Header/>
 <!-- welcome section -->
 <!--breadcumb start here-->
@@ -160,3 +173,4 @@
 </section>  <!-- End what we do section -->
 </main>
 <Footer/>
+{/if}
